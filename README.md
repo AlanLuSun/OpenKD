@@ -4,7 +4,7 @@
 
 The official implementation for **OpenKD: Opening Prompt Diversity for Zero-and Few-shot Keypoint Detection**.
 
-[Changsheng Lu](https://alanlusun.github.io/), [Zheyuan Liu](https://www.zheyuanliu.me/), [Piotr Koniusz](https://www.koniusz.com/)
+[**Changsheng Lu**](https://alanlusun.github.io/), [**Zheyuan Liu**](https://www.zheyuanliu.me/), [**Piotr Koniusz**](https://www.koniusz.com/)
 
 ##
 
