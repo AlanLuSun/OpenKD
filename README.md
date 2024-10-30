@@ -8,8 +8,8 @@ The official implementation for **OpenKD: Opening Prompt Diversity for Zero-and 
 
 ##
 
-[![cvf](https://img.shields.io/badge/paper-ECCV%202024-blue)](#) 
-[![arXiv](https://img.shields.io/badge/arXiv-stay%20tuned-00ff00)](#)
+[![cvf](https://img.shields.io/badge/paper-ECCV%202024-blue)](https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/02866.pdf) 
+[![arXiv](https://img.shields.io/badge/arXiv-2409.19899-00ff00)](https://arxiv.org/abs/2409.19899)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 </div>
@@ -18,7 +18,12 @@ The official implementation for **OpenKD: Opening Prompt Diversity for Zero-and 
 
 If you find this code useful for your research, please consider citing our work.
 ```bibtex
-  coming soon
+@InProceedings{openKD_eccv24,
+  author={Changsheng Lu and Zheyuan Liu and Piotr Koniusz},
+  title={OpenKD: Opening Prompt Diversity for Zero- and Few-shot Keypoint Detection},
+  booktitle={European Conference on Computer Vision (ECCV)},
+  year={2024},
+}
 ```
 
 ##
