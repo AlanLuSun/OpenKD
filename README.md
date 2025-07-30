@@ -1,6 +1,6 @@
 <div align="center">
 	
-## OpenKD
+# OpenKD
 
 The official implementation for **OpenKD: Opening Prompt Diversity for Zero-and Few-shot Keypoint Detection**.
 
@@ -30,7 +30,7 @@ If you find this code useful for your research, please consider citing our work.
 
 **News and upcoming updates**
 
-- [ ] **Jul-2024** We will release the source code and diverse text prompt sets soon. Stay tuned!
+- [ ] We will release the source code and diverse text prompt sets soon. Stay tuned!
 
 
 ## Contact
