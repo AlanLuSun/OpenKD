@@ -29,7 +29,7 @@ The official implementation for paper **OpenKD: Opening Prompt Diversity for Zer
 
 ## 2. Requirements
 
-We provided the major involved python packages in [requirements.txt](https://github.com/AlanLuSun/OpenKD/blob/main/requirements.txt). The code relies on minimal external packages and should be easy to run after installing the 
+We provided the major involved python packages in [requirements.txt](https://github.com/AlanLuSun/OpenKD/blob/main/requirements.txt). The codes rely on minimal external packages and should be easy to run after installing the 
 - pytorch
 - opencv, yacs, etc.
 
@@ -37,7 +37,7 @@ We provided the major involved python packages in [requirements.txt](https://git
 ## 3. Dataset Preparation
 - Animal pose dataset
   
-  For easy bootstrapping your own experiments and reproducing our results, we have uploaded the entire Animal pose dataset [here](https://drive.google.com/file/d/1G81INOtQogf8-23TfHbVVYvGKkNHRzJT/view?usp=sharing). After downloading the Animal pose dataset, the folders invovled in our OpenKD source codes are
+  For easy bootstrapping your own experiments and reproducing our results, we have uploaded the entire Animal pose dataset [here](https://drive.google.com/file/d/1G81INOtQogf8-23TfHbVVYvGKkNHRzJT/view?usp=sharing). After downloading the Animal pose dataset, the folders involved in our OpenKD source codes are
 
   ```angular2html
   |--Animal_Dataset_Combined  
@@ -65,9 +65,15 @@ We provided the major involved python packages in [requirements.txt](https://git
 
 - Download the [pre-trained weights of CLIP](https://github.com/openai/CLIP/blob/main/clip/clip.py#L31-L39), and place them into your local folder, e.g., ```pretrained_models/clip_weights```. Afterwards, please modify the path of CLIP.WEIGHTS_ROOT in config file [openkd.yaml](https://github.com/AlanLuSun/OpenKD/blob/main/experiments/configs/openkd.yaml#L12)
 
-- Train the OpenKD model
+- Train the OpenKD model with the novel text interpolation
   ```bash
   python3 train_openkd.py --cfg_file experiments/configs/openkd.yaml
+  ```
+
+- Train the OpenKD model without text interpolation
+  ```bash
+  python3 train_openkd.py --cfg_file experiments/configs/openkd.yaml \
+  DATASET.GENERATE_INTERPOLATED_TEXTS False
   ```
 
 ## 5. Zero-shot and few-shot testing
