@@ -1,0 +1,6 @@
+blip requires to install
+
+timm
+fairscale
+transformers
+

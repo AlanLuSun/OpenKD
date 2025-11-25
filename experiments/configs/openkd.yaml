@@ -1,0 +1,151 @@
+AUTO_RESUME: False
+MANUAL_SEED:
+OUTPUT_DIR: 'output'
+MODEL:
+  ENCODER:
+    TRUNK: CLIP  # 'CLIP', 'BLIP'
+    CLIP:
+      NAME: 'RN50.pt'  # 'ViT-B-32' (224), 'ViT-L-14-336px' (336), 'RN50' (224), 'RN101' (224), 'RN50x4' (288), 'RN50x16' (384), 'RN50x64' (448). All has downsize factor 32 except 'ViT-L-14-336px' has 14.
+      START_FROM_TRAIN: False  # set model.train() after init
+      VISION_LAYER_TO_TUNE: 2  # -1, disable (all tune); 0, no layer to tune (all freeze); 1, proj to tune; >=2, the last n layers to tune
+      TEXT_LAYER_TO_TUNE: 0  # -1, disable (all tune); 0, no layer to tune (all freeze); 1, proj to tune; >=2, the last n layers to tune
+      WEIGHTS_ROOT: '/project/vonneumann1/cl2025/pretrained_models/clip_weights'
+    BLIP:
+      NAME: 'model_base.pth'  # 'model_base.pth', 'model_large.pth'
+      VISION_LAYER_TO_TUNE: 1  # -1, disable (all tune); 0, no layer to tune (all freeze); 1, proj to tune
+      TEXT_LAYER_TO_TUNE: 0  # -1, disable (all tune); 0, no layer to tune (all freeze); 1, proj to tune
+      WEIGHTS_ROOT: '/project/vonneumann1/cl2025/pretrained_models/blip_weights'
+  ADAPTATION_NET:  # Vision & text Adaptation modules / Adapter
+    TYPE: 'RESIDUAL_REFINE2'  # null, 'RESIDUAL_REFINE' (use after_proj and before_proj features), 'RESIDUAL_REFINE2' (use after_proj features)
+    VISION_ANET:
+      TYPE: 'bottleneck'  # null, 'transformer', 'bottleneck'
+      NUM_BLOCKS: 1
+    TEXT_ANET:
+      TYPE: 'transformer'  # null, 'transformer'
+      NUM_BLOCKS: 1
+  FEATURE_UP: null  # null, 2. Up-scale feature map. Only support 'RESIDUAL_REFINE2' now.
+  VISUAL_PROMPT_EXTRACTOR:
+    TYPE: 'weighted_sum'  # 'weighted_sum', 'feat_interpolate', 'PE_interpolate'
+  CORRELATION_DECODING_NET:  # support-query feature correlation and heatmap decoding
+    TYPE: 'SIMPLE_CORRELATION'  # {'SIMPLE_CORRELATION', 'RELATION_PAIRS', 'CROSS_ATT'}+decoder, 'COSINE_SIMILARITY'
+    COSINE_SIMILARITY:
+    SIMPLE_CORRELATION:
+      DECODER: 'conv'  # {'conv' or 'transformer'} x N
+      NUM_BLOCKS: 2
+    RELATION_PAIRS:
+      DECODER: 'conv'  # {'conv' or 'transformer'} x N
+      NUM_BLOCKS: 2
+    CROSS_ATT:
+      DECODER:  # cross-att transformer x N
+      NUM_BLOCKS: 1
+  SUPER_RESO:
+    TYPE: 'prompt_agnostic'  # 'prompt_agnostic' or 'prompt_specific'
+    NET_TYPE: 'conv1'  # null, 'bilinear', 'conv1' (up+conv), 'conv2' (upsample+conv+relu+conv)
+    UP_SCALE: 2  # suggest 2 or 4. up-sampling for predicted heatmaps.
+  PRETRAINED: ''
+LOSS:
+  TYPE: 'MSE'  # 'MSE', 'sigmoid-bce', 'cross-entropy', 'GM_GM_L2', 'direct_coord'
+  MSE:
+    CLAMP_HEATMAP: False  # clamp heatmaps_predict to be 0~1.0
+  DIRECT_COORD:
+    EDGE_LENGTH: 2  # 1: coord range is 0~1; 2: coord range is -1~1
+  DOMAIN_ALIGNMENT:
+    TYPE: align_relation2  # null, 'align_relation2' (pairwise based)
+    V_T_ALIGN: True  # visual-textual alignment loss
+    V_V_ALIGN: False # visual-visual alignment loss
+    T_T_ALIGN: True # textual-textual alignment loss
+    V_T_ALIGN_ITPL: False  # for interpolated kps & texts
+    WEIGHT_ALIGN: [1, 1, 1, 1]
+    USE_QUERY_KPS: True  # include query kps to build instance/mean features
+    USE_PROTO_MAIN: False  # instance/mean for contrasting for main visual kps
+    USE_PROTO_ITPL: False  # instance/mean for contrasting for interpolated visual kps
+    SG_TEXTUAL: True  # Stop textual repres. gradient for v-t alignment
+    SIMILARITY:
+      TYPE: 'cosine'  # 'cosine', 'rbf', ['l2', 'l2-norm', 'l1'][only support 'align_repres']
+      TAU: 0.05  # softmax temperature 0.05, 0.07
+    ALIGN_RELATION2: # loss weight w=0.002
+    SAMPLED_NEG:
+      TYPE: null  # null, 'use_bbx', 'use_itpl'. Use sampled negative points to enhance contrastive
+      NUM_PER_IM: 10
+      DIST_THRESH: 30  # distance thresh of negative kps to main kps in pixels, 10, 15, ..., 40
+      BBX_EXTEND_RATIO: 1.15  # ratio to enlarge bbx: 0.8~1.0~1.15~2.0
+      USE_ALL_NEG: False  # if False, only used sampled negatives from pairwise image/episodes; If True, use all negs.
+  MULTI_GROUP_SUPERVISION: True  # False, fuse multi-group predicted heatmap into one; True, supervise group-wisely
+  OBJ_KP_HEATMAP_FUSION: 'avg'  # 'avg' or 'prod'
+  WEIGHT_MAIN_AUX: [1, 1, 0.002]  # loss weight main vs. auxiliary vs align
+TRAIN:
+  NUM_EPISODES: 40000
+  NUM_ROLL_OUT: 2  # Number episodes rolled out a time (Important to domain alignment!) | Note for DF2: only can be 1
+  TEXT_PROMPT_SETTING:
+    OBJ_TEXT: 0  # 0, don't add object text; >=1, generate n text prompts for each object
+    NUM_TEXT: 1  # 0, no kp text prompt used; >=1, generate n text prompts for each keypoint
+    ENABLE_ITPL_TEXT: True  # If True, both DATASET.GENERATE_INTERPOLATED_KPS and DATASET.GENERATE_INTERPOLATED_TEXTS=True
+    ITPL_TEXT_SETTING:
+      ASSIGN_STRATEGY: 'rand'  # 'top1', 'rand', 'corr', 'corr2rej'
+      CORR2REJ:
+        TOPK: 1  # 1 <= topk <= NUM_TEXTS_PER_PATH
+        SIM_THRESH: 0.01  # +0.00, 0.01, 0.03, 0.035, 0.04
+      SCHEDULER:  # to choose features for algorithm 'corr', 'corr2rej'
+        NUM_EPISODE_ORIGIN_FEAT: -1  # -1, use original CLIP feat always; 0, no bootstrap, directly use adapted features; >0, bootstrap, e.g., 10000.
+        ADAPTIVE_SIM_THRESH: False
+        SIM_THRESH_UP: 0.03    # upper bound, has effect when ADAPTIVE_SIM_THRESH=True
+        NUM_EPISODE_UP: 10000  # linearly up, has effect when ADAPTIVE_SIM_THRESH=True
+  NUM_TRAIN_SHOT: 1  # 0, no visual prompt; >=1, has visual prompts
+  NUM_TRAIN_QUERY: 5
+  ENABLE_ITPL_VISUAL: True  # If True, DATASET.GENERATE_INTERPOLATED_KPS should be True
+  OPTIMIZER: 'Adam'  # 'Adam' or 'SGD'
+  LR: 0.0001  # 0.0001
+  WEIGHT_DECAY: 0
+TEST:
+  TEXT_PROMPT_SETTING:
+    OBJ_TEXT: 0  # 0, don't add object text; >=1, generate n text prompts for each object
+    NUM_TEXT: 1  # 0, no kp text prompt used; >=1, generate n text prompts for each keypoint
+  NUM_TEST_SHOT: 0  # 0, no visual prompt; >=1, has visual prompts
+  NUM_TEST_QUERY: 5
+  FINETUNING_STEPS: 0
+DATASET:
+  TYPE: 'ANIMAL_POSE'
+  EPISODE_TYPE: 'one_class'
+  SQUARE_IMAGE_LENGTH: 384  # 448, 384, 256, 224, 192
+  SIGMA: 14    # 13, 14
+  GENERATE_INTERPOLATED_KPS: True
+  INTERPOLATION_KNOTS: [0.5] # [0.25, 0.5, 0.75], [0.25, 0.375, 0.5, 0.625, 0.75], [0.5]
+  AUXILIARY_PATH_MODE: 'predefined'  # 'predefined', 'exhaust', 'random'
+  NUM_RANDOM_PATHS: 6  # only used when auxiliary_path_mode='random'
+  GENERATE_INTERPOLATED_TEXTS: True  # True, generate interpolated texts via LLM. Only has effect when GENERATE_INTERPOLATED_KPS == True
+  ITPL_TEXT_CORPUS_SETTING:
+    ROOT: './datasets/text_corpus'
+    TYPE: 'hard'  # 'easy' (no COT), 'hard'
+    NUM_TEXTS_PER_PATH: 3  # K=1, 3
+    COT: True  # use chain-of-thought or not
+    NUM_REPEAT: 3  # 3, 5, 10
+  DIVERSE_TEXT_EVAL_SETTING:  # only used for evaluating diverse text prompting
+    ROOT: './datasets/text_prompts'
+    LLM: 'GPT'  # 'GPT' or 'Vicuna'
+    NUM_TEXT_PROMPT: 1000
+    USE_PARSED_OBJ_TEXT: True
+  OUTPUT_SALIENCY_MAP: False
+  ANIMAL_POSE:
+    UNSEEN_CLASS: 'dog'
+    HDF5: False
+    IMAGE_ROOT: '/project/vonneumann1/cl2025/keypoint_datasets/animal_pose/animal_pose_dataset/images'
+    JSON_ROOT: '/project/vonneumann1/cl2025/keypoint_datasets/animal_pose/animal_pose_dataset/annotations'
+    SALIENCY_MAPS_ROOT: '/project/vonneumann1/cl2025/keypoint_datasets/animal_pose/animal_pose_dataset/saliency_maps/Animal_Dataset_Combined'  # None
+  AWA:
+    HDF5: True
+    IMAGE_ROOT: '/your/path/to/Animals_with_Attributes2/JPEGImages.hdf5'  # image root or an hdf5 file
+    JSON_ROOT: '/your/path/to/AwAPose-annotations-coco'
+    SALIENCY_MAPS_ROOT: '/your/path/to/AwA_saliency.hdf5'
+  CUB:
+    HDF5: True
+    IMAGE_ROOT: '/your/path/to/CUB_200_2011/images.hdf5'
+    JSON_ROOT: '/your/path/to/CUB-200-2011/annotations-coco'
+    SALIENCY_MAPS_ROOT: '/your/path/to/saliency_maps/CUB_200_2011/images.hdf5'
+  NABIRD:
+    HDF5: True
+    IMAGE_ROOT: '/your/path/to/nabirds/images.hdf5'
+    JSON_ROOT: '/your/path/to/annotations-coco'
+    SALIENCY_MAPS_ROOT: '/your/path/to/saliency_maps/nabirds/images.hdf5'
+AUTONAME:
+  KEYS: []   # pass string list like AUTONAME.KEYS ('LOSS.TYPE',)
+  LABELS: [] # pass string list like AUTONAME.LABELS ('A',)
