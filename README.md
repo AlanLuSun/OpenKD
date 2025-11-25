@@ -2,7 +2,7 @@
 	
 # OpenKD: Opening Prompt Diversity for Zero-and Few-shot Keypoint Detection
 
-The official implementation for paper **OpenKD: Opening Prompt Diversity for Zero-and Few-shot Keypoint Detection**.
+This is the official implementation for our ECCV 2024 paper.
 
 [**Changsheng Lu**](https://alanlusun.github.io/), [**Zheyuan Liu**](https://www.zheyuanliu.me/), [**Piotr Koniusz**](https://www.koniusz.com/)
 
