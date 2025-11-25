@@ -129,23 +129,23 @@ DATASET:
     UNSEEN_CLASS: 'dog'
     HDF5: False
     IMAGE_ROOT: '/project/vonneumann1/cl2025/keypoint_datasets/animal_pose/animal_pose_dataset/images'
-    JSON_ROOT: '/project/vonneumann1/cl2025/keypoint_datasets/animal_pose/animal_pose_dataset/annotations'
+    JSON_ROOT: '/project/vonneumann1/cl2025/keypoint_datasets/animal_pose/animal_pose_dataset/gt_coco'
     SALIENCY_MAPS_ROOT: '/project/vonneumann1/cl2025/keypoint_datasets/animal_pose/animal_pose_dataset/saliency_maps/Animal_Dataset_Combined'  # None
   AWA:
-    HDF5: True
-    IMAGE_ROOT: '/your/path/to/Animals_with_Attributes2/JPEGImages.hdf5'  # image root or an hdf5 file
-    JSON_ROOT: '/your/path/to/AwAPose-annotations-coco'
-    SALIENCY_MAPS_ROOT: '/your/path/to/AwA_saliency.hdf5'
+    HDF5: False
+    IMAGE_ROOT: '/your/path/to/awa_pose/Animals_with_Attributes2/JPEGImages'  # image root or an hdf5 file
+    JSON_ROOT: '/your/path/to/awa_pose/annotations'
+    SALIENCY_MAPS_ROOT: '/your/path/to/awa_pose/saliency_maps'
   CUB:
-    HDF5: True
-    IMAGE_ROOT: '/your/path/to/CUB_200_2011/images.hdf5'
-    JSON_ROOT: '/your/path/to/CUB-200-2011/annotations-coco'
-    SALIENCY_MAPS_ROOT: '/your/path/to/saliency_maps/CUB_200_2011/images.hdf5'
+    HDF5: False
+    IMAGE_ROOT: '/your/path/to/cub/CUB_200_2011/images'
+    JSON_ROOT: '/your/path/to/cub/annotations'
+    SALIENCY_MAPS_ROOT: '/your/path/to/cub/saliency_maps'
   NABIRD:
-    HDF5: True
-    IMAGE_ROOT: '/your/path/to/nabirds/images.hdf5'
-    JSON_ROOT: '/your/path/to/annotations-coco'
-    SALIENCY_MAPS_ROOT: '/your/path/to/saliency_maps/nabirds/images.hdf5'
+    HDF5: False
+    IMAGE_ROOT: '/your/path/to/nabirds/images'
+    JSON_ROOT: '/your/path/to/nabirds/annotations'
+    SALIENCY_MAPS_ROOT: '/your/path/to/nabirds/saliency_maps'
 AUTONAME:
   KEYS: []   # pass string list like AUTONAME.KEYS ('LOSS.TYPE',)
   LABELS: [] # pass string list like AUTONAME.LABELS ('A',)
