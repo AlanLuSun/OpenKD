@@ -110,13 +110,38 @@ The interesting diverse text prompting can be done via
 
 ## 7. Citation
 
-If you find this code useful for your research, please cite our work.
+If you find this code useful for your research, please cite our work:
 ```bibtex
 @InProceedings{openKD_eccv24,
   author={Changsheng Lu and Zheyuan Liu and Piotr Koniusz},
   title={OpenKD: Opening Prompt Diversity for Zero- and Few-shot Keypoint Detection},
   booktitle={European Conference on Computer Vision (ECCV)},
   year={2024},
+}
+@inproceedings{lu2022few,
+  title={Few-shot keypoint detection with uncertainty learning for unseen species},
+  author={Lu, Changsheng and Koniusz, Piotr},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages={19416--19426},
+  year={2022}
+}
+@inproceedings{lu2025exploiting,
+  title={Exploiting Class-agnostic Visual Prior for Few-shot Keypoint Detection},
+  author={Lu, Changsheng and Zhu, Hao and Koniusz, Piotr},
+  booktitle={International Journal of Computer Vision},
+  pages={19416--19426},
+  year={2025}
+}
+```
+
+You are also welcome to check out our latest work on general keypoint detection practical for diverse applications, which supports both visual and text prompts:
+```
+@inproceedings{lu2026gkdt,
+  title={GKDT: General Keypoint Detection Transformer},
+  author={Lu, Changsheng and Chen, Yuxin and Gui, Haokun and Wang, Rong and Yang, Jie and Yang, Harry and Hengel, Anton van den and Jia, Jiaya},
+  booktitle={European Conference on Computer Vision},
+  year={2026},
+  organization={Springer}
 }
 ```
 
