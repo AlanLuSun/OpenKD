@@ -125,6 +125,15 @@ If you find this code useful for your research, please cite our work:
   pages={19416--19426},
   year={2022}
 }
+@inproceedings{lu2024detect,
+  title={Detect any keypoints: An efficient light-weight few-shot keypoint detector},
+  author={Lu, Changsheng and Koniusz, Piotr},
+  booktitle={Proceedings of the AAAI Conference on Artificial Intelligence},
+  volume={38},
+  number={4},
+  pages={3882--3890},
+  year={2024}
+}
 @inproceedings{lu2025exploiting,
   title={Exploiting Class-agnostic Visual Prior for Few-shot Keypoint Detection},
   author={Lu, Changsheng and Zhu, Hao and Koniusz, Piotr},
